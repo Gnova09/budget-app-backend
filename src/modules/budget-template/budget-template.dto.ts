@@ -5,6 +5,7 @@ import {
   IsEnum,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
   Min,
   ValidateNested,
@@ -24,6 +25,21 @@ export class TemplateCategoryDto {
   limit: number;
 }
 
+export class UpdateTemplateCategoryDto {
+  @IsString()
+  @IsOptional()
+  name?: string;
+
+  @IsEnum(CategoryType)
+  @IsOptional()
+  type?: CategoryType;
+
+  @IsNumber()
+  @Min(0)
+  @IsOptional()
+  limit?: number;
+}
+
 export class CreateBudgetTemplateDto {
   @IsString()
   @IsNotEmpty()
@@ -33,6 +49,14 @@ export class CreateBudgetTemplateDto {
   @IsNotEmpty()
   name: string;
 
+  @IsArray()
+  @ArrayMinSize(1)
+  @ValidateNested({ each: true })
+  @Type(() => TemplateCategoryDto)
+  categories: TemplateCategoryDto[];
+}
+
+export class UpdateCategoriesDto {
   @IsArray()
   @ArrayMinSize(1)
   @ValidateNested({ each: true })
