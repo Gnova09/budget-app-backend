@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
 import { ExpenseService } from './expense.service';
 import { CreateExpenseDto } from './expense.dto';
 
@@ -14,5 +14,10 @@ export class ExpenseController {
   @Get()
   findByMonth(@Query('month') month: string) {
     return this.expenseService.findByMonth(month);
+  }
+
+  @Delete(':id')
+  delete(@Param('id') id: string) {
+    return this.expenseService.delete(id);
   }
 }

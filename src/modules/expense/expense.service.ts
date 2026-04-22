@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Expense } from './expense.schema.js';
@@ -22,6 +22,19 @@ export class ExpenseService {
       return await this.expenseModel.find({ month });
     } catch (error) {
       throw new InternalServerErrorException('Error fetching expenses');
+    }
+  }
+
+  async delete(id: string): Promise<Expense> {
+    try {
+      const expense = await this.expenseModel.findByIdAndDelete(id);
+      if (!expense) {
+        throw new NotFoundException('Expense not found');
+      }
+      return expense;
+    } catch (error) {
+      if (error instanceof NotFoundException) throw error;
+      throw new InternalServerErrorException('Error deleting expense');
     }
   }
 }
