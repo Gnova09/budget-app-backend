@@ -37,4 +37,35 @@ export class SavingService {
       throw new InternalServerErrorException('Error deleting saving');
     }
   }
+
+  async getSummaryByUserId(userId: string) {
+    try {
+      const [result] = await this.savingModel.aggregate([
+        { $match: { userId } },
+        {
+          $facet: {
+            total: [{ $group: { _id: null, amount: { $sum: '$amount' } } }],
+            byCategory: [
+              { $group: { _id: '$category', amount: { $sum: '$amount' } } },
+              { $project: { _id: 0, category: '$_id', amount: 1 } },
+              { $sort: { amount: -1 } },
+            ],
+            byMonth: [
+              { $group: { _id: '$month', amount: { $sum: '$amount' } } },
+              { $project: { _id: 0, month: '$_id', amount: 1 } },
+              { $sort: { month: -1 } },
+            ],
+          },
+        },
+      ]);
+
+      return {
+        total: result.total[0]?.amount ?? 0,
+        byCategory: result.byCategory,
+        byMonth: result.byMonth,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException('Error fetching savings summary');
+    }
+  }
 }

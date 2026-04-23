@@ -11,6 +11,11 @@ export class SavingController {
     return this.savingService.create(dto);
   }
 
+  @Get('summary')
+  getSummary(@Query('userId') userId: string) {
+    return this.savingService.getSummaryByUserId(userId);
+  }
+
   @Get()
   findByMonth(@Query('month') month: string) {
     return this.savingService.findByMonth(month);
