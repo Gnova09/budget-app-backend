@@ -40,6 +40,26 @@ export class UpdateTemplateCategoryDto {
   limit?: number;
 }
 
+export class TemplateSavingCategoryDto {
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsNumber()
+  @Min(0)
+  targetAmount: number;
+}
+
+export class TemplateIncomeCategoryDto {
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsNumber()
+  @Min(0)
+  expectedAmount: number;
+}
+
 export class CreateBudgetTemplateDto {
   @IsString()
   @IsNotEmpty()
@@ -54,6 +74,18 @@ export class CreateBudgetTemplateDto {
   @ValidateNested({ each: true })
   @Type(() => TemplateCategoryDto)
   categories: TemplateCategoryDto[];
+
+  @IsArray()
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => TemplateSavingCategoryDto)
+  savingsCategories?: TemplateSavingCategoryDto[];
+
+  @IsArray()
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => TemplateIncomeCategoryDto)
+  incomeCategories?: TemplateIncomeCategoryDto[];
 }
 
 export class UpdateCategoriesDto {
@@ -62,4 +94,20 @@ export class UpdateCategoriesDto {
   @ValidateNested({ each: true })
   @Type(() => TemplateCategoryDto)
   categories: TemplateCategoryDto[];
+}
+
+export class UpdateSavingsCategoriesDto {
+  @IsArray()
+  @ArrayMinSize(1)
+  @ValidateNested({ each: true })
+  @Type(() => TemplateSavingCategoryDto)
+  savingsCategories: TemplateSavingCategoryDto[];
+}
+
+export class UpdateIncomeCategoriesDto {
+  @IsArray()
+  @ArrayMinSize(1)
+  @ValidateNested({ each: true })
+  @Type(() => TemplateIncomeCategoryDto)
+  incomeCategories: TemplateIncomeCategoryDto[];
 }

@@ -5,7 +5,11 @@ import { BudgetTemplate } from './budget-template.schema.js';
 import {
   CreateBudgetTemplateDto,
   TemplateCategoryDto,
+  TemplateSavingCategoryDto,
+  TemplateIncomeCategoryDto,
   UpdateCategoriesDto,
+  UpdateSavingsCategoriesDto,
+  UpdateIncomeCategoriesDto,
   UpdateTemplateCategoryDto,
 } from './budget-template.dto.js';
 
@@ -74,6 +78,68 @@ export class BudgetTemplateService {
     const template = await this.budgetTemplateModel.findByIdAndUpdate(
       templateId,
       { $pull: { categories: { name: categoryName } } },
+      { new: true },
+    );
+    if (!template) throw new NotFoundException('Budget template not found');
+    return template;
+  }
+
+  // Savings categories
+  async updateSavingsCategories(templateId: string, dto: UpdateSavingsCategoriesDto): Promise<BudgetTemplate> {
+    const template = await this.budgetTemplateModel.findByIdAndUpdate(
+      templateId,
+      { $set: { savingsCategories: dto.savingsCategories } },
+      { new: true },
+    );
+    if (!template) throw new NotFoundException('Budget template not found');
+    return template;
+  }
+
+  async addSavingCategory(templateId: string, category: TemplateSavingCategoryDto): Promise<BudgetTemplate> {
+    const template = await this.budgetTemplateModel.findByIdAndUpdate(
+      templateId,
+      { $push: { savingsCategories: category } },
+      { new: true },
+    );
+    if (!template) throw new NotFoundException('Budget template not found');
+    return template;
+  }
+
+  async removeSavingCategory(templateId: string, categoryName: string): Promise<BudgetTemplate> {
+    const template = await this.budgetTemplateModel.findByIdAndUpdate(
+      templateId,
+      { $pull: { savingsCategories: { name: categoryName } } },
+      { new: true },
+    );
+    if (!template) throw new NotFoundException('Budget template not found');
+    return template;
+  }
+
+  // Income categories
+  async updateIncomeCategories(templateId: string, dto: UpdateIncomeCategoriesDto): Promise<BudgetTemplate> {
+    const template = await this.budgetTemplateModel.findByIdAndUpdate(
+      templateId,
+      { $set: { incomeCategories: dto.incomeCategories } },
+      { new: true },
+    );
+    if (!template) throw new NotFoundException('Budget template not found');
+    return template;
+  }
+
+  async addIncomeCategory(templateId: string, category: TemplateIncomeCategoryDto): Promise<BudgetTemplate> {
+    const template = await this.budgetTemplateModel.findByIdAndUpdate(
+      templateId,
+      { $push: { incomeCategories: category } },
+      { new: true },
+    );
+    if (!template) throw new NotFoundException('Budget template not found');
+    return template;
+  }
+
+  async removeIncomeCategory(templateId: string, categoryName: string): Promise<BudgetTemplate> {
+    const template = await this.budgetTemplateModel.findByIdAndUpdate(
+      templateId,
+      { $pull: { incomeCategories: { name: categoryName } } },
       { new: true },
     );
     if (!template) throw new NotFoundException('Budget template not found');

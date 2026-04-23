@@ -43,10 +43,22 @@ export class MonthlyBudgetService {
       limit: cat.limit,
     }));
 
+    const savingsCategories = (template.savingsCategories || []).map((cat) => ({
+      name: cat.name,
+      targetAmount: cat.targetAmount,
+    }));
+
+    const incomeCategories = (template.incomeCategories || []).map((cat) => ({
+      name: cat.name,
+      expectedAmount: cat.expectedAmount,
+    }));
+
     return await this.monthlyBudgetModel.create({
       userId,
       month,
       categories,
+      savingsCategories,
+      incomeCategories,
       generatedFromTemplate: true,
     });
   }

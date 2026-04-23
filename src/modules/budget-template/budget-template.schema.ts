@@ -13,6 +13,22 @@ class TemplateCategory {
   limit: number;
 }
 
+class TemplateSavingCategory {
+  @Prop({ required: true })
+  name: string;
+
+  @Prop({ required: true })
+  targetAmount: number;
+}
+
+class TemplateIncomeCategory {
+  @Prop({ required: true })
+  name: string;
+
+  @Prop({ required: true })
+  expectedAmount: number;
+}
+
 @Schema({ timestamps: true })
 export class BudgetTemplate extends Document {
   @Prop({ required: true })
@@ -26,6 +42,18 @@ export class BudgetTemplate extends Document {
     required: true,
   })
   categories: TemplateCategory[];
+
+  @Prop({
+    type: [{ name: String, targetAmount: Number }],
+    default: [],
+  })
+  savingsCategories: TemplateSavingCategory[];
+
+  @Prop({
+    type: [{ name: String, expectedAmount: Number }],
+    default: [],
+  })
+  incomeCategories: TemplateIncomeCategory[];
 }
 
 export const BudgetTemplateSchema = SchemaFactory.createForClass(BudgetTemplate);

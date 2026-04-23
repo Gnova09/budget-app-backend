@@ -13,6 +13,22 @@ class MonthlyBudgetCategory {
   limit: number;
 }
 
+class MonthlyBudgetSavingCategory {
+  @Prop({ required: true })
+  name: string;
+
+  @Prop({ required: true })
+  targetAmount: number;
+}
+
+class MonthlyBudgetIncomeCategory {
+  @Prop({ required: true })
+  name: string;
+
+  @Prop({ required: true })
+  expectedAmount: number;
+}
+
 @Schema({ timestamps: true })
 export class MonthlyBudget extends Document {
   @Prop({ required: true })
@@ -26,6 +42,18 @@ export class MonthlyBudget extends Document {
     required: true,
   })
   categories: MonthlyBudgetCategory[];
+
+  @Prop({
+    type: [{ name: String, targetAmount: Number }],
+    default: [],
+  })
+  savingsCategories: MonthlyBudgetSavingCategory[];
+
+  @Prop({
+    type: [{ name: String, expectedAmount: Number }],
+    default: [],
+  })
+  incomeCategories: MonthlyBudgetIncomeCategory[];
 
   @Prop({ default: true })
   generatedFromTemplate: boolean;

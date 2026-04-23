@@ -3,7 +3,11 @@ import { BudgetTemplateService } from './budget-template.service.js';
 import {
   CreateBudgetTemplateDto,
   TemplateCategoryDto,
+  TemplateSavingCategoryDto,
+  TemplateIncomeCategoryDto,
   UpdateCategoriesDto,
+  UpdateSavingsCategoriesDto,
+  UpdateIncomeCategoriesDto,
   UpdateTemplateCategoryDto,
 } from './budget-template.dto.js';
 
@@ -43,5 +47,37 @@ export class BudgetTemplateController {
   @Delete(':id/categories/:categoryName')
   removeCategory(@Param('id') id: string, @Param('categoryName') categoryName: string) {
     return this.budgetTemplateService.removeCategory(id, categoryName);
+  }
+
+  // Savings categories
+  @Put(':id/savings-categories')
+  updateSavingsCategories(@Param('id') id: string, @Body() dto: UpdateSavingsCategoriesDto) {
+    return this.budgetTemplateService.updateSavingsCategories(id, dto);
+  }
+
+  @Post(':id/savings-categories')
+  addSavingCategory(@Param('id') id: string, @Body() category: TemplateSavingCategoryDto) {
+    return this.budgetTemplateService.addSavingCategory(id, category);
+  }
+
+  @Delete(':id/savings-categories/:categoryName')
+  removeSavingCategory(@Param('id') id: string, @Param('categoryName') categoryName: string) {
+    return this.budgetTemplateService.removeSavingCategory(id, categoryName);
+  }
+
+  // Income categories
+  @Put(':id/income-categories')
+  updateIncomeCategories(@Param('id') id: string, @Body() dto: UpdateIncomeCategoriesDto) {
+    return this.budgetTemplateService.updateIncomeCategories(id, dto);
+  }
+
+  @Post(':id/income-categories')
+  addIncomeCategory(@Param('id') id: string, @Body() category: TemplateIncomeCategoryDto) {
+    return this.budgetTemplateService.addIncomeCategory(id, category);
+  }
+
+  @Delete(':id/income-categories/:categoryName')
+  removeIncomeCategory(@Param('id') id: string, @Param('categoryName') categoryName: string) {
+    return this.budgetTemplateService.removeIncomeCategory(id, categoryName);
   }
 }
